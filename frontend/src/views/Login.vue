@@ -1,20 +1,19 @@
 <template>
 <div class="login">
     <div class="background-image"></div>
-    <div class="login-form">
+    <form class="login-form">
         <h2>CryptoBank</h2>
-        <form class="form">
+        <img class="icon" src="https://cdn2.iconfinder.com/data/icons/security-1/512/electronic_lock-512.png" alt="CryptoBank Icon">
             <md-input-container>
                 <label>Username</label>
-                <md-input v-model="initialValue"></md-input>
+                <md-input class="test" v-model="initialValue"></md-input>
             </md-input-container>
             <md-input-container>
                 <label>Password</label>
                 <md-input v-model="password"></md-input>
             </md-input-container>
-            <md-button class="md-primary">Primary</md-button>
-        </form>
-    </div>    
+            <md-button class="md-primary">Anmelden</md-button>
+    </form>    
 </div>
   
 </template>
@@ -48,29 +47,26 @@ export default {
 
 .login-form {
   z-index: 2;
-  color: black;
+  color: white;
   max-width: 500px;
   margin-top: 50px;
-  background-color: rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.20);
   width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  padding: 15px;
+  border-radius: 3px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
 }
 
-/* .test {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-} */
+.icon {
+    width: 6em;
+}
 
-.form {
-    padding: 5px;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    width: 100%;
+test {
+    color: white;
 }
 </style>
 
