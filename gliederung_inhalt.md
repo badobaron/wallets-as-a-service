@@ -3,6 +3,12 @@
 ## 1. Einführung
 - Was sind Kryptowährungen
 - Wissenschaftlicher Dreiklang
+- ?Was ist Blockchain?
+
+### Motivation
+- Keine großen Finanzunternehmen hinter den Walletentwicklern
+- Wenn nicht open source und von Hand compiliert, kann Schadcode in den Code gelangen, der sensible Daten an Dritte weitergibt
+- Nutzer verlieren täglich Geld in Wallets, weil sie ihren privaten Schlüssel vergessen
 
 ## 2. Vorgehensweise
 - Analyse herkömmlicher Lösungen (Bankkonten + Cryptocoin Wallets)
