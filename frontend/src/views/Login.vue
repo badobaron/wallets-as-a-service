@@ -6,13 +6,13 @@
         <img class="icon" src="https://cdn2.iconfinder.com/data/icons/security-1/512/electronic_lock-512.png" alt="CryptoBank Icon">
             <md-input-container>
                 <label>Username</label>
-                <md-input class="test" v-model="initialValue"></md-input>
+                <md-input v-model="initialValue"></md-input>
             </md-input-container>
-            <md-input-container>
-                <label>Password</label>
-                <md-input v-model="password"></md-input>
-            </md-input-container>
-            <md-button class="md-primary">Anmelden</md-button>
+            <md-input-container md-has-password>
+    <label>Password</label>
+    <md-input type="password"></md-input>
+  </md-input-container>
+            <md-button class="md-raised md-primary">Anmelden</md-button>
     </form>    
 </div>
   
@@ -47,10 +47,10 @@ export default {
 
 .login-form {
   z-index: 2;
-  color: white;
+  color: black;
   max-width: 500px;
   margin-top: 50px;
-  background-color: rgba(255, 255, 255, 0.20);
+  background-color: rgba(255, 255, 255, 0.80);
   width: 100%;
   display: flex;
   justify-content: center;
@@ -63,10 +63,6 @@ export default {
 
 .icon {
     width: 6em;
-}
-
-test {
-    color: white;
 }
 </style>
 
