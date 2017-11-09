@@ -1,15 +1,13 @@
 package main
 
 import (
-	"log"
 
+	//	"log"
+	"fmt"
 	"wallets-as-a-service/backend/walletcommunicator"
 )
 
 func main() {
-	apikey := "45cf-7687-926e-1ae2"
+	fmt.Println(walletcommunicator.GetBalance("BzLRccyFyt5gMaxgAUezpRQb96vDwP6k8q"))
 
-	var balance string = walletcommunicator.GetBalance(apikey)
-
-	log.Println(balance)
 }

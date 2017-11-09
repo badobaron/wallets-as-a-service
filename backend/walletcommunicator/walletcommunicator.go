@@ -5,20 +5,16 @@ import (
 	"net/http"
 )
 
-func GetBalance(apikey string) string {
-	rs, err := http.Get("https://block.io/api/v2/get_balance/?api_key=" + apikey)
+func GetBalance(address string) string {
+	balance, err := http.Get("https://api.blockcypher.com/v1/bcy/test/addrs/" + address + "/balance")
 
-	if err != nil {
-		panic(err) // More idiomatic way would be to print the error and die unless it's a serious error
-	}
-	defer rs.Body.Close()
-
-	bodyBytes, err := ioutil.ReadAll(rs.Body)
 	if err != nil {
 		panic(err)
 	}
 
-	bodyString := string(bodyBytes)
+	defer balance.Body.Close()
 
+	bodyBytes, err := ioutil.ReadAll(balance.Body)
+	bodyString := string(bodyBytes)
 	return bodyString
 }
