@@ -12,15 +12,28 @@
     <label>Password</label>
     <md-input type="password"></md-input>
   </md-input-container>
-            <md-button class="md-raised md-primary">Anmelden</md-button>
+    <md-button class="md-raised md-primary" v-on:click="login">Anmelden</md-button>
     </form>    
 </div>
   
 </template>
 
 <script>
+import axios from 'axios';
+
+const data = {
+  email: 'info@andreas-winter.eu',
+  password: 'password',
+};
+
 export default {
   name: 'Login',
+  methods: {
+    login() {
+      axios.post('http://127.0.0.1:8090/users/login', data)
+      .then((response) => { alert(response.data); });
+    },
+  },
 };
 </script>
 
