@@ -10,6 +10,10 @@ type (
 	UserResource struct {
 		Data models.User `json:"data"`
 	}
+	//For Post - /wallet/create
+	WalletResource struct {
+		Data models.Wallet `json:"data"`
+	}
 	//For Post - /user/login
 	LoginResource struct {
 		Data LoginModel `json:"data"`

@@ -14,4 +14,8 @@ type (
 		Password     string        `json:"password,omitempty"`
 		HashPassword []byte        `json:"hashpassword,omitempty"`
 	}
+	Wallet struct {
+		Id			bson.ObjectId  `bson:"_id,omitempty" json:"id"`
+
+	}
 )
