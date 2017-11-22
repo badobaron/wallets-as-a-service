@@ -3,6 +3,7 @@ package models
 import (
 
 	"gopkg.in/mgo.v2/bson"
+	"github.com/blockcypher/gobcy"
 )
 
 type (
@@ -16,6 +17,6 @@ type (
 	}
 	Account struct {
 		Id			bson.ObjectId  `bson:"_id,omitempty" json:"id"`
-
+		Wallet		gobcy.Wallet	`json:"wallet"`
 	}
 )

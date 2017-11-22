@@ -17,23 +17,36 @@ func GetAccounts(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateAccount(w http.ResponseWriter, r *http.Request) {
-
-
-	addrKeys, err := bcy.GenAddrMultisig(gobcy.AddrKeychain{PubKeys: []string{"02c716d071a76cbf0d29c29cacfec76e0ef8116b37389fb7a3e76d6d32cf59f4d3", "033ef4d5165637d99b673bcdbb7ead359cee6afd7aaf78d3da9d2392ee4102c8ea", "022b8934cc41e76cb4286b9f3ed57e2d27798395b04dd23711981a77dc216df8ca"}, ScriptType: "multisig-2-of-3"})
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Printf("%+v\n", addrKeys)
 	context := NewContext()
 	defer context.Close()
 	col := context.DbCollection("accounts")
 	repo := &data.AccountRepository{C: col}
+	// Create new wallet
+	wallet := createWallet("test123321")
 	// Insert account document
 
-	repo.CreateAccount()
+	repo.CreateAccount(wallet)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+}
+
+func createAddress() gobcy.AddrKeychain {
+	addrKeys, err := bcy.GenAddrKeychain()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return addrKeys
+}
+
+func createWallet(userId string) gobcy.Wallet{
+	keychain := createAddress()
+	wallet, err := bcy.CreateWallet(gobcy.Wallet{userId, []string{keychain.Address}})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	return wallet
 }
 
 
