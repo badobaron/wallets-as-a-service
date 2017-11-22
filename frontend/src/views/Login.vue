@@ -6,11 +6,11 @@
         <img class="icon" src="https://cdn2.iconfinder.com/data/icons/security-1/512/electronic_lock-512.png" alt="CryptoBank Icon">
             <md-input-container>
                 <label>Username</label>
-                <md-input v-model="initialValue"></md-input>
+                <md-input v-model="username"></md-input>
             </md-input-container>
             <md-input-container md-has-password>
     <label>Password</label>
-    <md-input type="password"></md-input>
+    <md-input type="password" v-model="password"></md-input>
   </md-input-container>
     <md-button class="md-raised md-primary" v-on:click="login">Anmelden</md-button>
     </form>    
@@ -21,17 +21,23 @@
 <script>
 import axios from 'axios';
 
-const data = {
-  email: 'info@andreas-winter.eu',
-  password: 'password',
-};
-
 export default {
   name: 'Login',
+  data() {
+    return {
+      username: '',
+      password: '',
+    };
+  },
   methods: {
     login() {
-      axios.post('http://127.0.0.1:8090/users/login', data)
-      .then((response) => { alert(response.data); });
+      axios.post('http://127.0.0.1:8090/users/login', {
+        data: {
+          email: this.username,
+          password: this.password,
+        },
+      })
+      .then(this.$router.push('overview'));
     },
   },
 };

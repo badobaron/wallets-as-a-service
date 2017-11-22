@@ -1,6 +1,11 @@
 <template>
   <div>
     <header-component></header-component>
+    <md-card>
+      <md-card-content>
+        This is the overview page
+      </md-card-content>
+    </md-card>
   </div>
 </template>
 
