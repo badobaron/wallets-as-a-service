@@ -23,12 +23,6 @@ import axios from 'axios';
 
 export default {
   name: 'Login',
-  data() {
-    return {
-      username: '',
-      password: '',
-    };
-  },
   methods: {
     login() {
       axios.post('http://127.0.0.1:8090/users/login', {

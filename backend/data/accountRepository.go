@@ -6,13 +6,13 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type WalletRepository struct {
+type AccountRepository struct {
 	C *mgo.Collection
 }
 
-func (r *UserRepository) CreateWallet(wallet *models.Wallet) error {
+func (r *AccountRepository) CreateAccount(account *models.Account) error {
 	obj_id := bson.NewObjectId()
-	wallet.Id = obj_id
-	err := r.C.Insert(&wallet)
+	account.Id = obj_id
+	err := r.C.Insert(&account)
 	return err
 }

@@ -14,9 +14,9 @@ import (
 func main() {
 	// allow OPTIONS
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://127.0.0.1:8080"},
+		AllowedOrigins: []string{"http://127.0.0.1:8080", "http://localhost:8080"},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders: []string{"X-Auth-Key", "X-Auth-Secret"},
+		AllowedHeaders: []string{"X-Auth-Key", "X-Auth-Secret", "Content-Type"},
 		Debug: true,
 	})
 

@@ -25,9 +25,9 @@ type AppClaims struct {
 // location of private/public key files
 const (
 	// openssl genrsa -out app.rsa 1024
-	privKeyPath = "github.com/wandi34/wallets-as-a-service/backend/keys/tm.rsa"
+	privKeyPath = "backend/keys/tm.rsa"
 	// openssl rsa -in app.rsa -pubout > app.rsa.pub
-	pubKeyPath = "github.com/wandi34/wallets-as-a-service/backend/keys/tm.rsa.pub"
+	pubKeyPath = "backend/keys/tm.rsa.pub"
 )
 
 // Private key for signing and public key for verification

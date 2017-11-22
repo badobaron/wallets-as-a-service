@@ -47,7 +47,7 @@ func initConfig() {
 
 // Reads config.json and decode into AppConfig
 func loadAppConfig() {
-	file, err := os.Open("github.com/wandi34/wallets-as-a-service/backend/common/config.json")
+	file, err := os.Open("backend/common/config.json")
 	defer file.Close()
 	if err != nil {
 		log.Fatalf("[loadConfig]: %s\n", err)
