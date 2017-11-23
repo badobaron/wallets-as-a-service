@@ -17,6 +17,7 @@ type (
 	}
 	Account struct {
 		Id			bson.ObjectId  `bson:"_id,omitempty" json:"id"`
-		Wallet		gobcy.Wallet	`json:"wallet"`
+		UserId		bson.ObjectId	`json:"userId"`
+		Wallet		gobcy.AddrKeychain	`json:"addrKeys"`
 	}
 )

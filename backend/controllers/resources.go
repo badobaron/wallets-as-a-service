@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/wandi34/wallets-as-a-service/backend/models"
+	"gopkg.in/mgo.v2/bson"
 )
 
 //Models for JSON resources
@@ -13,6 +14,10 @@ type (
 	//For Post - /wallet/create
 	AccountResource struct {
 		Data models.Account `json:"data"`
+	}
+	//For Post - /users/{id}/accounts
+	CreateWalletResource struct {
+		Data CreateWalletModel `json:"data"`
 	}
 	//For Post - /user/login
 	LoginResource struct {
@@ -31,5 +36,9 @@ type (
 	AuthUserModel struct {
 		User  models.User `json:"user"`
 		Token string      `json:"token"`
+	}
+	//Model for creating a wallet
+	CreateWalletModel struct {
+		UserId	bson.ObjectId `json:"userId""`
 	}
 )
