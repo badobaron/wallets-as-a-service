@@ -10,5 +10,7 @@ func InitRoutes() *mux.Router {
 	router = SetUserRoutes(router)
 	// Routes for the CryptoAccount entity
 	router = SetAccountRoutes(router)
+	// Routes for the Transactions entity
+	router = SetTransactionsRoutes(router)
 	return router
 }

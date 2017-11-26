@@ -19,6 +19,10 @@ type (
 	CreateWalletResource struct {
 		Data CreateWalletModel `json:"data"`
 	}
+	//For Post - /users/{id}/accounts/{id}/transactions
+	CreateTransactionResource struct {
+		Data CreateTransactionModel `json:"data"`
+	}
 	//For Post - /user/login
 	LoginResource struct {
 		Data LoginModel `json:"data"`
@@ -39,6 +43,15 @@ type (
 	}
 	//Model for creating a wallet
 	CreateWalletModel struct {
-		UserId	bson.ObjectId `json:"userId""`
+		UserId	bson.ObjectId `json:"userId"`
 	}
+
+	//Model for creating a wallet
+	CreateTransactionModel struct {
+		SourceAddress	string `json:"source"`
+		TargetAddress	string `json:"target"`
+		Amount			string `json:"amount"`
+	}
+
+
 )
