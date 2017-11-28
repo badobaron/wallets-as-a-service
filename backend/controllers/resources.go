@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/wandi34/wallets-as-a-service/backend/models"
 	"gopkg.in/mgo.v2/bson"
+	"github.com/blockcypher/gobcy"
 )
 
 //Models for JSON resources
@@ -22,6 +23,10 @@ type (
 	//For Post - /users/{id}/accounts/{id}/transactions
 	CreateTransactionResource struct {
 		Data CreateTransactionModel `json:"data"`
+	}
+	//For Get - /addresses/{id}
+	GetAddressResource struct {
+		Data gobcy.Addr `json:"data"`
 	}
 	//For Post - /user/login
 	LoginResource struct {
