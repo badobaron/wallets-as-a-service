@@ -42,7 +42,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	repo := &data.AccountRepository{C: col}
 	// Authenticate the login user
 	result := models.Account{}
-	err = repo.C.Find(bson.M{"wallet.address": "C85ZfUB6W1KfwX3WPB9avoM4wciTKdFVbP"}).One(&result)
+	err = repo.C.Find(bson.M{"wallet.address": sourceAddress}).One(&result)
 	fmt.Println(len(skel.ToSign))
 	err = skel.Sign([]string{result.Wallet.Private})
 	if err != nil {
