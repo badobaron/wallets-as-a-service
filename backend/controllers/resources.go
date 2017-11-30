@@ -12,6 +12,10 @@ type (
 	UserResource struct {
 		Data models.User `json:"data"`
 	}
+	//For Post - /iban
+	IbanResource struct {
+		Data models.Iban `json:"data"`
+	}
 	//For Post - /wallet/create
 	AccountResource struct {
 		Data models.Account `json:"data"`

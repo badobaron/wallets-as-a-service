@@ -20,4 +20,8 @@ type (
 		UserId		bson.ObjectId	`json:"userId"`
 		Wallet		gobcy.AddrKeychain	`json:"addrKeys"`
 	}
+	Iban struct {
+		TargetAddress		string			`json:"targetAddress"`
+		Amount				string			`json:"amount"`
+	}
 )
