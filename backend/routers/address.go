@@ -6,7 +6,6 @@ import (
 )
 
 func SetAddressRoutes(router *mux.Router) *mux.Router {
-	addressRouter := mux.NewRouter()
-	addressRouter.HandleFunc("/addresses/{id}", controllers.GetAddress).Methods("GET")
-	return addressRouter
+	router.HandleFunc("/addresses/{id}", controllers.GetAddress).Methods("GET")
+	return router
 }
