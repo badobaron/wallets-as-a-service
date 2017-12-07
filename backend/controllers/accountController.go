@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	_ "github.com/wandi34/wallets-as-a-service/backend/data"
 	"github.com/wandi34/wallets-as-a-service/backend/data"
 	"github.com/blockcypher/gobcy"
 	"fmt"
@@ -11,6 +10,8 @@ import (
 	"github.com/wandi34/wallets-as-a-service/backend/models"
 	"gopkg.in/mgo.v2/bson"
 	"github.com/gorilla/mux"
+	"crypto/aes"
+	"bytes"
 )
 
 
@@ -65,6 +66,8 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	repo := &data.AccountRepository{C: col}
 	// Create new wallet
 	addrKeys := createAddress()
+	// Encrypt private key with guard
+	addrKeys.Private = encryptPrivateKey(addrKeys.Private, "1234")
 	// Insert account document
 	repo.CreateAccount(addrKeys, dataResource.Data.UserId)
 
@@ -78,6 +81,19 @@ func createAddress() gobcy.AddrKeychain {
 		fmt.Println(err)
 	}
 	return addrKeys
+}
+
+func encryptPrivateKey(privateKey, secret string) string {
+	bc, err := aes.NewCipher([]byte(secret))
+	if (err != nil) {
+		fmt.Println(err)
+	}
+
+	var dst = make([]byte, 16)
+	var src = []byte(privateKey)
+
+	bc.Encrypt(dst, src)
+	return bytes.NewBuffer(dst).String()
 }
 
 
