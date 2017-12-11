@@ -16,3 +16,10 @@ func (r *AccountRepository) CreateAccount(addrKeys gobcy.AddrKeychain, userId bs
 	err := r.C.Insert(&account)
 	return err
 }
+
+func (r *AccountRepository) GetKeyChainFromAddress(address string) (gobcy.AddrKeychain, error) {
+	result := models.Account{}
+	err := r.C.Find(bson.M{"wallet.address": address}).One(&result)
+
+	return result.Wallet, err
+}

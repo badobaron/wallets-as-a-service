@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/wandi34/wallets-as-a-service/backend/common"
-	"fmt"
 	"strings"
+	"github.com/wandi34/wallets-as-a-service/backend/data"
 )
 
 func ConvertIban(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +25,7 @@ func ConvertIban(w http.ResponseWriter, r *http.Request) {
 	//Convert euro in cryptocurrency
 	url := "https://blockchain.info/tobtc?currency=EUR&value=" + strings.Replace(ibanTransaction.Amount, ",",".", -1)
 	resp, err := http.Get(url)
-	var amount float64
+	var amount float32
 	err = json.NewDecoder(resp.Body).Decode(&amount)
 	if err != nil {
 		common.DisplayAppError(
@@ -36,12 +36,37 @@ func ConvertIban(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-
-
-	_, err = bcy.Faucet("CCUg986pdG5J3ek52kyMs9XhF5TqV8ND8C", 3e5)
+	txHash, err := faucet(&w, "C6TBCjG3LGWJg5JTvQDDWqu7vibXuTFLTN", int(amount))
 	if err != nil {
-		fmt.Println(err)
+		common.DisplayAppError(
+			w,
+			err,
+			"Faucet error",
+			500,
+		)
+		return
+	}
+	j, err := json.Marshal(txHash)
+	w.Write(j)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+}
+
+func faucet(w *http.ResponseWriter, address string, amount int) (string, error) {
+	context := NewContext()
+	defer context.Close()
+	col := context.DbCollection("accounts")
+	repo := &data.AccountRepository{C: col}
+	keyChain, err := repo.GetKeyChainFromAddress(address)
+	if err != nil {
+			common.DisplayAppError(
+				*w,
+				err,
+				"No such address",
+				500,
+			)
 	}
 
-
+	return bcy.Faucet(keyChain, amount)
 }
