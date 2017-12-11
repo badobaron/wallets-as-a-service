@@ -12,8 +12,6 @@ import (
 	"strconv"
 )
 
-//var bcy = gobcy.API{"2aa27c3912c047f2baa7e932cfc453e7", "bcy", "test"}
-
 func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	var dataResource CreateTransactionResource
 	// Decode the incoming Transaction json
@@ -44,7 +42,15 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	result := models.Account{}
 	err = repo.C.Find(bson.M{"wallet.address": sourceAddress}).One(&result)
 	fmt.Println(len(skel.ToSign))
-	err = skel.Sign([]string{result.Wallet.Private})
+	// Decrypt private key
+	privateKey, _ := common.Decrypt(common.GetMd5Hash("1234"), []byte(result.Wallet.Private))
+
+	//Sign all open transactions with private key
+	var signingKeys []string
+	for i := 0;i < len(skel.ToSign);i++{
+		signingKeys = append(signingKeys, string(privateKey[:]))
+	}
+	err = skel.Sign(signingKeys)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -55,3 +61,4 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("%+v\n", skel)
 }
+
