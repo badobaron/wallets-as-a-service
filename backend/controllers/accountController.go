@@ -66,10 +66,11 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	addrKeys := createAddress()
 	//TODO: Encrypt key with userCredentialGuard
 	// Encrypt private key with guard
-	encryptedBytes, _ := common.Encrypt(common.GetMd5Hash("1234"), []byte(addrKeys.Private))
+	password := dataResource.Data.Password
+	encryptedBytes, _ := common.Encrypt(common.GetMd5Hash(password), []byte(addrKeys.Private))
 	addrKeys.Private = string(encryptedBytes[:])
 	// Insert account document
-	repo.CreateAccount(addrKeys, dataResource.Data.UserId)
+	repo.CreateAccount(addrKeys, dataResource.Data.UserId, common.GetMd5Hash(password))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)

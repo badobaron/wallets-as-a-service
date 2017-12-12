@@ -10,6 +10,8 @@ import (
 	"github.com/wandi34/wallets-as-a-service/backend/models"
 	"gopkg.in/mgo.v2/bson"
 	"strconv"
+	"bytes"
+	"errors"
 )
 
 func CreateTransaction(w http.ResponseWriter, r *http.Request) {
@@ -31,7 +33,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	//Post New TXSkeleton
 	skel, err := bcy.NewTX(gobcy.TempNewTX(sourceAddress, targetAddress, amount), false)
 	if err != nil {
-		fmt.Println(err)
+		common.DisplayAppError(w, err, "Tx Error", 400)
 	}
 	//Sign it locally
 	context := NewContext()
@@ -43,7 +45,13 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	err = repo.C.Find(bson.M{"wallet.address": sourceAddress}).One(&result)
 	fmt.Println(len(skel.ToSign))
 	// Decrypt private key
-	privateKey, _ := common.Decrypt(common.GetMd5Hash("1234"), []byte(result.Wallet.Private))
+	password := dataResource.Data.Password
+	if !bytes.Equal(common.GetMd5Hash(password), result.PwHash) {
+		err := errors.New("wrong password")
+		common.DisplayAppError(w, err, "Given password is wrong", 400)
+		return
+	}
+	privateKey, _ := common.Decrypt(common.GetMd5Hash(dataResource.Data.Password), []byte(result.Wallet.Private))
 
 	//Sign all open transactions with private key
 	var signingKeys []string
@@ -52,13 +60,18 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	}
 	err = skel.Sign(signingKeys)
 	if err != nil {
-		fmt.Println(err)
+		common.DisplayAppError(w, err, "Signing Tx Error", 400)
 	}
 	//Send TXSkeleton
 	skel, err = bcy.SendTX(skel)
 	if err != nil {
-		fmt.Println(err)
+		common.DisplayAppError(w, err, "Sending Tx Error", 400)
 	}
 	fmt.Printf("%+v\n", skel)
+
+	j, _ := json.Marshal(skel)
+	w.Write(j)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 }
 

@@ -18,6 +18,7 @@ type (
 	Account struct {
 		Id			bson.ObjectId  `bson:"_id,omitempty" json:"id"`
 		UserId		bson.ObjectId	`json:"userId"`
+		PwHash		[]byte			`json:"pwHash"`
 		Wallet		gobcy.AddrKeychain	`json:"addrKeys"`
 	}
 	Iban struct {

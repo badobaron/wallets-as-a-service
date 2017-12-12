@@ -52,7 +52,8 @@ type (
 	}
 	//Model for creating a wallet
 	CreateWalletModel struct {
-		UserId	bson.ObjectId `json:"userId"`
+		UserId		bson.ObjectId 	`json:"userId"`
+		Password	string			`json:"password"`
 	}
 
 	//Model for creating a wallet
@@ -60,6 +61,7 @@ type (
 		SourceAddress	string `json:"source"`
 		TargetAddress	string `json:"target"`
 		Amount			string `json:"amount"`
+		Password		string `json:"password"`
 	}
 
 
