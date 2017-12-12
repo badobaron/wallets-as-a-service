@@ -10,7 +10,6 @@ import (
 func SetTransactionsRoutes(router *mux.Router) *mux.Router {
 	transactionRouter := mux.NewRouter()
 	transactionRouter.HandleFunc("/transactions", controllers.CreateTransaction).Methods("POST")
-	//accountRouter.HandleFunc("/users/{id}/accounts/{id}/transactions", controllers.GetTransactions).Methods("GET")
 	router.PathPrefix("/transactions").Handler(negroni.New(
 		negroni.HandlerFunc(common.Authorize),
 		negroni.Wrap(transactionRouter),
