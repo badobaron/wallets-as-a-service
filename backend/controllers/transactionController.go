@@ -34,6 +34,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	skel, err := bcy.NewTX(gobcy.TempNewTX(sourceAddress, targetAddress, amount), false)
 	if err != nil {
 		common.DisplayAppError(w, err, "Tx Error", 400)
+		return
 	}
 	//Sign it locally
 	context := NewContext()
@@ -61,11 +62,13 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	err = skel.Sign(signingKeys)
 	if err != nil {
 		common.DisplayAppError(w, err, "Signing Tx Error", 400)
+		return
 	}
 	//Send TXSkeleton
 	skel, err = bcy.SendTX(skel)
 	if err != nil {
 		common.DisplayAppError(w, err, "Sending Tx Error", 400)
+		return
 	}
 	fmt.Printf("%+v\n", skel)
 
