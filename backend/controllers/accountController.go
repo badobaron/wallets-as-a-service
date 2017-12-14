@@ -69,8 +69,10 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	password := dataResource.Data.Password
 	encryptedBytes, _ := common.Encrypt(common.GetMd5Hash(password), []byte(addrKeys.Private))
 	addrKeys.Private = string(encryptedBytes[:])
+	// Create iban for cryptowallet
+	iban := createIBAN()
 	// Insert account document
-	repo.CreateAccount(addrKeys, dataResource.Data.UserId, common.GetMd5Hash(password))
+	repo.CreateAccount(addrKeys, dataResource.Data.UserId, common.GetMd5Hash(password), iban)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -82,6 +84,12 @@ func createAddress() gobcy.AddrKeychain {
 		fmt.Println(err)
 	}
 	return addrKeys
+}
+
+func createIBAN() string {
+	// For real implementation get a free iban address
+	// For prototype, iban will be created from the service
+	return "DE89 3704 0044 0532 0130 00"
 }
 
 

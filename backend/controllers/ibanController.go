@@ -36,7 +36,23 @@ func ConvertIban(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	txHash, err := faucet(&w, "C6TBCjG3LGWJg5JTvQDDWqu7vibXuTFLTN", int(amount))
+
+	context := NewContext()
+	defer context.Close()
+	col := context.DbCollection("accounts")
+	repo := &data.AccountRepository{C: col}
+
+	address, err := repo.GetAddressFromIban(dataResource.Data.TargetAddress)
+	if err != nil {
+		common.DisplayAppError(
+			w,
+			err,
+			"IBAN not found",
+			400,
+		)
+		return
+	}
+	txHash, err := faucet(&w, address, int(amount))
 	if err != nil {
 		common.DisplayAppError(
 			w,
