@@ -52,7 +52,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 		common.DisplayAppError(w, err, "Given password is wrong", 400)
 		return
 	}
-	privateKey, _ := common.Decrypt(common.GetMd5Hash(dataResource.Data.Password), []byte(result.Wallet.Private))
+	privateKey, _ := common.Decrypt(dataResource.Data.Password, []byte(result.Wallet.Private), result.UserId.String())
 
 	//Sign all open transactions with private key
 	var signingKeys []string

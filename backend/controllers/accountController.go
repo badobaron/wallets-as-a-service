@@ -67,7 +67,7 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	//TODO: Encrypt key with userCredentialGuard
 	// Encrypt private key with guard
 	password := dataResource.Data.Password
-	encryptedBytes, _ := common.Encrypt(common.GetMd5Hash(password), []byte(addrKeys.Private))
+	encryptedBytes, _ := common.Encrypt(password, addrKeys.Private, dataResource.Data.UserId.String())
 	addrKeys.Private = string(encryptedBytes[:])
 	// Create iban for cryptowallet
 	iban := createIBAN()
