@@ -10,6 +10,7 @@ import (
 	"github.com/wandi34/wallets-as-a-service/backend/models"
 	"gopkg.in/mgo.v2/bson"
 	"github.com/gorilla/mux"
+	"github.com/SSSaaS/sssa-golang"
 )
 
 
@@ -64,7 +65,8 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	repo := &data.AccountRepository{C: col}
 	// Create new wallet
 	addrKeys := createAddress()
-	//TODO: Encrypt key with userCredentialGuard
+	// Split private key into shares for restore function
+	splitSecret(addrKeys.Private)
 	// Encrypt private key with guard
 	password := dataResource.Data.Password
 	encryptedBytes, _ := common.Encrypt(password, addrKeys.Private, dataResource.Data.UserId.String())
@@ -92,4 +94,12 @@ func createIBAN() string {
 	return "DE89 3704 0044 0532 0130 00"
 }
 
+func splitSecret(secret string){
+	shares, _ := sssa.Create(2,3,secret)
+	// Securely send shares to their owners
+	// For prototype just print shares to console
+	for _, i := range shares {
+		fmt.Println(i)
+	}
+}
 

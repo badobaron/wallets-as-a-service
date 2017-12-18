@@ -16,5 +16,7 @@ func InitRoutes() *mux.Router {
 	router = SetAddressRoutes(router)
 	// Routes for the IBAN entity
 	router = SetIbanRoutes(router)
+	// Routes for the Restore entity
+	router = SetRestoreRoutes(router)
 	return router
 }

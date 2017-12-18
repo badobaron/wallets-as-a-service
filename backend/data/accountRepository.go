@@ -11,7 +11,7 @@ type AccountRepository struct {
 	C *mgo.Collection
 }
 
-func (r *AccountRepository) CreateAccount(addrKeys gobcy.AddrKeychain, userId bson.ObjectId, pwHash []byte, iban string ) error {
+func (r *AccountRepository) CreateAccount(addrKeys gobcy.AddrKeychain, userId bson.ObjectId, pwHash []byte, iban string) error {
 	account := models.Account{bson.NewObjectId(), userId, iban,pwHash, addrKeys}
 	err := r.C.Insert(&account)
 	return err

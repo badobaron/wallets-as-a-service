@@ -29,7 +29,7 @@ func Encrypt(password, secret, userId string) ([]byte, error) {
 }
 
 func Decrypt(password string, secret []byte, userId string) ([]byte, error) {
-	passwordHash, _ := scrypt.Key([]byte(password), []byte(userId), 16384, 8, 8, 32)
+	passwordHash := GetScryptHash(password, userId)
 	block, err := aes.NewCipher(passwordHash)
 	if err != nil {
 		return nil, err
@@ -52,4 +52,9 @@ func GetMd5Hash(text string) []byte {
 	hasher := md5.New()
 	hasher.Write([]byte(text))
 	return hasher.Sum(nil)
+}
+
+func GetScryptHash(password, salt string) []byte {
+	passwordHash, _ := scrypt.Key([]byte(password), []byte(salt), 16384, 8, 8, 32)
+	return passwordHash
 }
