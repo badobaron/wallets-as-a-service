@@ -28,6 +28,10 @@ type (
 	CreateTransactionResource struct {
 		Data CreateTransactionModel `json:"data"`
 	}
+	//For Post - /restore
+	RestorePrivateKeyResource struct {
+		Data RestorePrivateKeyModel `json:"data"`
+	}
 	//For Get - /addresses/{id}
 	GetAddressResource struct {
 		Data gobcy.Addr `json:"data"`
@@ -62,6 +66,12 @@ type (
 		TargetAddress	string `json:"target"`
 		Amount			string `json:"amount"`
 		Password		string `json:"password"`
+	}
+	//Model for restoring a private key with shares
+	RestorePrivateKeyModel struct {
+		AccountId		bson.ObjectId	`json:"accountId"`
+		Parts			[]string		`json:"parts"`
+		Password		string			`json:"password"`
 	}
 
 

@@ -10,8 +10,6 @@ import (
 	"github.com/wandi34/wallets-as-a-service/backend/models"
 	"gopkg.in/mgo.v2/bson"
 	"strconv"
-	"bytes"
-	"errors"
 )
 
 func CreateTransaction(w http.ResponseWriter, r *http.Request) {
@@ -44,14 +42,6 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	// Authenticate the login user
 	result := models.Account{}
 	err = repo.C.Find(bson.M{"wallet.address": sourceAddress}).One(&result)
-	fmt.Println(len(skel.ToSign))
-	// Decrypt private key
-	password := dataResource.Data.Password
-	if !bytes.Equal(common.GetMd5Hash(password), result.PwHash) {
-		err := errors.New("wrong password")
-		common.DisplayAppError(w, err, "Given password is wrong", 400)
-		return
-	}
 	privateKey, _ := common.Decrypt(dataResource.Data.Password, []byte(result.Wallet.Private), result.UserId.String())
 
 	//Sign all open transactions with private key
