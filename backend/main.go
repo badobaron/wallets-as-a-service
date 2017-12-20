@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/codegangsta/negroni"
-	common "github.com/wandi34/wallets-as-a-service/backend/common"
+	"github.com/wandi34/wallets-as-a-service/backend/common"
 	"github.com/wandi34/wallets-as-a-service/backend/routers"
 	"github.com/rs/cors"
 )

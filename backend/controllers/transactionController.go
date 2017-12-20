@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/wandi34/wallets-as-a-service/backend/common"
 	"fmt"
-	"github.com/blockcypher/gobcy"
 	"github.com/wandi34/wallets-as-a-service/backend/data"
 	"github.com/wandi34/wallets-as-a-service/backend/models"
 	"gopkg.in/mgo.v2/bson"
@@ -17,19 +16,14 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	// Decode the incoming Transaction json
 	err := json.NewDecoder(r.Body).Decode(&dataResource)
 	if err != nil {
-		common.DisplayAppError(
-			w,
-			err,
-			"Invalid body",
-			500,
-		)
+		common.DisplayAppError(w, err, "Invalid body", 500, )
 		return
 	}
 	sourceAddress := dataResource.Data.SourceAddress
 	targetAddress := dataResource.Data.TargetAddress
 	amount, err := strconv.Atoi(dataResource.Data.Amount)
 	//Post New TXSkeleton
-	skel, err := bcy.NewTX(gobcy.TempNewTX(sourceAddress, targetAddress, amount), false)
+	skel, err := common.CreateTransaction(sourceAddress, targetAddress, amount)
 	if err != nil {
 		common.DisplayAppError(w, err, "Tx Error", 400)
 		return
@@ -55,7 +49,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//Send TXSkeleton
-	skel, err = bcy.SendTX(skel)
+	skel, err = common.SendTransaction(skel)
 	if err != nil {
 		common.DisplayAppError(w, err, "Sending Tx Error", 400)
 		return

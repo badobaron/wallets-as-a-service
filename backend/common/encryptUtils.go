@@ -9,6 +9,8 @@ import (
 	"errors"
 	"crypto/md5"
 	"golang.org/x/crypto/scrypt"
+	"github.com/SSSaaS/sssa-golang"
+	"fmt"
 )
 
 func Encrypt(password, secret, userId string) ([]byte, error) {
@@ -46,6 +48,15 @@ func Decrypt(password string, secret []byte, userId string) ([]byte, error) {
 		return nil, err
 	}
 	return data, nil
+}
+
+func SplitSecret(secret string){
+	shares, _ := sssa.Create(2,3,secret)
+	// Securely send shares to their owners
+	// For prototype just print shares to console
+	for _, i := range shares {
+		fmt.Println(i)
+	}
 }
 
 func GetMd5Hash(text string) []byte {

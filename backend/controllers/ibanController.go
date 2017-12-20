@@ -74,7 +74,7 @@ func faucet(w *http.ResponseWriter, address string, amount int) (string, error) 
 	defer context.Close()
 	col := context.DbCollection("accounts")
 	repo := &data.AccountRepository{C: col}
-	keyChain, err := repo.GetKeyChainFromAddress(address)
+	keychain, err := repo.GetKeyChainFromAddress(address)
 	if err != nil {
 			common.DisplayAppError(
 				*w,
@@ -83,6 +83,5 @@ func faucet(w *http.ResponseWriter, address string, amount int) (string, error) 
 				500,
 			)
 	}
-
-	return bcy.Faucet(keyChain, amount)
+	return common.FaucetAddress(keychain, amount)
 }

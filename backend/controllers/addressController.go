@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"net/http"
-	"fmt"
 	"github.com/gorilla/mux"
 	"encoding/json"
+	"github.com/wandi34/wallets-as-a-service/backend/common"
 )
 
 func GetAddress(w http.ResponseWriter, r *http.Request) {
@@ -12,9 +12,10 @@ func GetAddress(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	addressId := vars["id"]
 
-	addr, err := bcy.GetAddr(addressId, nil)
+	addr, err := common.GetAddress(addressId)
 	if err != nil {
-		fmt.Println(err)
+		common.DisplayAppError(w, err, "Address not available", 400)
+		return
 	}
 	w.WriteHeader(http.StatusOK)
 	j, err := json.Marshal(GetAddressResource{addr})

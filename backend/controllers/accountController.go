@@ -2,19 +2,13 @@ package controllers
 
 import (
 	"net/http"
-	"github.com/wandi34/wallets-as-a-service/backend/data"
-	"github.com/blockcypher/gobcy"
-	"fmt"
 	"encoding/json"
 	"github.com/wandi34/wallets-as-a-service/backend/common"
 	"github.com/wandi34/wallets-as-a-service/backend/models"
 	"gopkg.in/mgo.v2/bson"
 	"github.com/gorilla/mux"
-	"github.com/SSSaaS/sssa-golang"
+	"github.com/wandi34/wallets-as-a-service/backend/data"
 )
-
-
-var bcy = gobcy.API{"2aa27c3912c047f2baa7e932cfc453e7", "bcy", "test"}
 
 func GetAccounts(w http.ResponseWriter, r *http.Request) {
 	// Get userId from URL
@@ -26,7 +20,7 @@ func GetAccounts(w http.ResponseWriter, r *http.Request) {
 	defer context.Close()
 	col := context.DbCollection("accounts")
 	repo := &data.AccountRepository{C: col}
-	// Authenticate the login user
+
 	result := models.Account{}
 	err := repo.C.Find(bson.M{"userid": userId}).One(&result)
 	if err != nil {
@@ -51,12 +45,7 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	// Decode the incoming CreateAccount json
 	err := json.NewDecoder(r.Body).Decode(&dataResource)
 	if err != nil {
-		common.DisplayAppError(
-			w,
-			err,
-			"Invalid body",
-			500,
-		)
+		common.DisplayAppError(w, err, "Invalid body", 500, )
 		return
 	}
 	context := NewContext()
@@ -64,15 +53,19 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	col := context.DbCollection("accounts")
 	repo := &data.AccountRepository{C: col}
 	// Create new wallet
-	addrKeys := createAddress()
-	// Split private key into shares for restore function
-	splitSecret(addrKeys.Private)
-	// Encrypt private key with guard
+	addrKeys, err := common.CreateAddress()
+	if err != nil {
+		common.DisplayAppError(w, err, "Account creation error", 500, )
+		return
+	}
+	// Split private key into parts with SSSS for restore function
+	common.SplitSecret(addrKeys.Private)
+	// Encrypt private key with password
 	password := dataResource.Data.Password
 	encryptedBytes, _ := common.Encrypt(password, addrKeys.Private, dataResource.Data.UserId.String())
 	addrKeys.Private = string(encryptedBytes[:])
 	// Create iban for cryptowallet
-	iban := createIBAN()
+	iban := common.CreateIBAN()
 	// Insert account document
 	repo.CreateAccount(addrKeys, dataResource.Data.UserId, common.GetMd5Hash(password), iban)
 
@@ -80,26 +73,11 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func createAddress() gobcy.AddrKeychain {
-	addrKeys, err := bcy.GenAddrKeychain()
-	if err != nil {
-		fmt.Println(err)
-	}
-	return addrKeys
-}
-
-func createIBAN() string {
-	// For real implementation get a free iban address
-	// For prototype, iban will be created from the service
-	return "DE89 3704 0044 0532 0130 00"
-}
-
-func splitSecret(secret string){
-	shares, _ := sssa.Create(2,3,secret)
-	// Securely send shares to their owners
-	// For prototype just print shares to console
-	for _, i := range shares {
-		fmt.Println(i)
-	}
-}
+//func getAccountRepository() *data.AccountRepository {
+//	context := NewContext()
+//	defer context.Close()
+//	col := context.DbCollection("accounts")
+//	repo := &data.AccountRepository{C: col}
+//	return repo
+//}
 
